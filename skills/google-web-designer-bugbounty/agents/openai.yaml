@@ -1,0 +1,4 @@
+interface:
+  display_name: "Google Web Designer Bug Bounty"
+  short_description: "Hunt Google Web Designer client-side RCE"
+  default_prompt: "Use $google-web-designer-bugbounty to assess Google Web Designer project/template attack surfaces for authorized bug bounty testing."
