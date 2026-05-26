@@ -1,6 +1,11 @@
 {
   "colorScheme": "dark",
   "enableTelemetry": false,
+  "permissions": {
+    "allow": [
+      "mcp(burp/get_proxy_http_history)"
+    ]
+  },
   "trustedWorkspaces": [
     "/Users/user/Desktop/_SNI",
     "/Users/user",
