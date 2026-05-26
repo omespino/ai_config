@@ -16,14 +16,15 @@ Contiene: perfil del usuario, idioma, reglas de comportamiento, reglas de engage
 
 ---
 
-## Burp Suite MCP — uso eficiente
+## Burp Suite MCP — uso eficiente (Optimizado para grandes volúmenes >10k)
 
 Cuando uses las herramientas MCP de Burp, sigue estas reglas:
 
-- **Por defecto**: fetch solo las últimas 20–50 requests (offset=0, limit=20 o 50).
-- **Para buscar patrones**: usa `get_proxy_http_history_regex` con filtro específico en vez de paginar.
-- **Nunca pagines automáticamente** más allá de lo necesario para responder la pregunta.
-- **Solo escala** (más requests, más páginas) si el usuario lo pide explícitamente.
+- **Estructura del historial**: El historial es cronológico (el índice `0` es el más antiguo). Para obtener las peticiones más recientes, se debe consultar el final del historial.
+- **Búsqueda rápida del final (Cola)**: En entornos con miles de peticiones, encuentra el final del historial haciendo saltos exponenciales (probar `count=1` con `offset=10000`, `20000`, etc.) para delimitar el final en un máximo de 2 o 3 llamadas rápidas, en lugar de paginar secuencialmente desde el inicio.
+- **Parámetros correctos**: Utiliza siempre los parámetros reales del MCP: `offset` y `count` (no uses `limit`).
+- **Límite de lectura de registros**: Al inspeccionar peticiones, mantén un tamaño de bloque razonable (máximo `count=50`) ubicado cerca del offset final estimado.
+- **Búsqueda por patrones**: Para buscar endpoints, parámetros o payloads específicos, utiliza obligatoriamente `get_proxy_http_history_regex` con expresiones regulares optimizadas. Está prohibido paginar secuencialmente buscando coincidencias manualmente.
 
 ---
 

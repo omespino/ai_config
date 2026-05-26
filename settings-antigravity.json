@@ -3,7 +3,8 @@
   "enableTelemetry": false,
   "permissions": {
     "allow": [
-      "mcp(burp/get_proxy_http_history)"
+      "mcp(burp/get_proxy_http_history)",
+      "mcp(burp/get_scanner_issues)"
     ]
   },
   "trustedWorkspaces": [

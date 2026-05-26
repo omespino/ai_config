@@ -71,6 +71,49 @@ Long click-trail leads to a "private" browser without parental controls, exposin
 ### #116 — $50,000 — Jatin — `GmsSubscribedFeedsProvider` exported with no permission
 `adb shell content query --uri content://com.google.android.gms.subscribedfeeds/accounts` returns Google account list and sync feeds without any Android permission.
 
+---
+
+## Recent additions (2023–2025, from public writeups)
+
+### Pixel lock screen bypass — CVE-2022-20465 ($70k)
+Pixel phones running Android 13 before the November 2022 patch could bypass the lock screen by inserting a SIM card from a carrier that triggers a SIM-PUK flow. The SIM unlock screen allowed launching the Emergency Dialer, then accessing the Recent Calls list and opening contacts — defeating the lock screen without the PIN. Root cause: SIM-PUK dialog rendered on top of keyguard without proper `FLAG_SHOW_WHEN_LOCKED` restrictions. Reporter: David Schutz.
+
+### Google Home wiretap chain — $107,500
+Chain of two bugs found in Google Home mini: (1) An unauthenticated API endpoint (`/setup/eureka_info`) exposed the device's local cloud device ID and certificate. (2) A `routines` API accepted new device links without verifying that the linker was the device owner — anyone on the LAN could link a "spy routine" that triggered the microphone remotely. Effectively a zero-click LAN wiretap. Reporter: Matt Kunze.
+
+### CVE-2024-0044 — Android app installer signature bypass ($8k)
+Android's `PackageInstaller` in versions before the March 2024 patch allowed a pre-installed app with `INSTALL_PACKAGES` to install a package update that changed the signing certificate without the user's consent. A system app (e.g., a carrier bloatware) could silently "upgrade" itself to a version signed by a different key, effectively impersonating any installed app. Root cause: `PackageManagerService.checkUpgradeKeySetLP()` not enforced in the silent-install path.
+
+### ChromeOS File Manager XSS via `filesystem:` URL — CVE-2023-4369 ($10k)
+The ChromeOS Files app (`chrome://file-manager`) opened user-selected files using `filesystem:chrome-extension://...` URLs. An HTML file with a crafted `Content-Type` or an SVG with embedded `<script>` rendered in the extension origin, allowing XSS within the file manager extension's privilege level (access to `chrome.fileSystem`, `chrome.fileBrowserHandler`).
+
+### Chrome Extensions multi-bug chain — $18,833
+Three bugs chained across separate Chrome extensions shipped by Google:
+1. **Application Launcher for Drive** (`lmjegmlicamnimmfhcmpkclmigmmcbeh`): lax `externally_connectable` + native messaging proxy → arbitrary file open/RCE (see existing #62).
+2. **Perfetto UI** extension: `chrome.devtools.network.getHAR` accessible via compromised renderer → exfiltrates all network traffic including OAuth tokens.
+3. **Screen Reader** (ChromeVox): `chrome.accessibilityFeatures.spokenFeedback` writable by any `*.google.com` page → enables screenreader, then intercepts `chrome.tts.speak` events to extract page content.
+Reporter: NDevTK.
+
+### Google Assistant voice injection via Web Speech API ($3,133)
+`assistant.google.com` used the Web Speech API for voice input. The `SpeechRecognition` result was directly appended to the assistant query string without sanitization. An attacker page embedding the assistant in an iframe with appropriate permissions could call `speechSynthesis.speak()` to produce audio that the microphone picked up and was transcribed, injecting arbitrary commands into the assistant session.
+
+### Wear OS CVE-2025-12080 — intent abuse
+Wear OS companion app exported activity `com.google.android.gms.wearable.BIND_LISTENER` accepted `intent://` deep links from the watch face context without validating the package origin. A malicious watch face could send `intent://...#Intent;package=com.android.settings;...` launching sensitive Settings screens on the paired phone.
+
+### Chrome Gemini side panel hijack ($7k)
+Chrome's built-in Gemini side panel (`chrome://side-panel/`) communicated with the active tab via `chrome.tabs.sendMessage`. A page injecting a content script (e.g., via a Chrome extension with broad permissions, or a compromised renderer) could intercept or spoof these messages, injecting content into the Gemini conversation or reading Gemini's responses to the user.
+
+### IDX VSCode Worker XSS — $22,500
+Project IDX's embedded VS Code worker ran as a Web Worker on `*.idx.cloudworkstations.dev`. The extension host iframe (`webWorkerExtensionHostIframe.html`) read `parentOrigin` from the URL query string and used it as the `targetOrigin` for `postMessage`. An XSS on any `*.cloudworkstations.googleusercontent.com` subdomain (e.g., from an uploaded `.ipynb` notebook) could frame the IDE and send spoofed messages, reaching the worker context → Login-CSRF → full IDE takeover. (Related to #4 in the web skill.)
+
+### Android web attack surface — Firebase, Clock, Faceviewer ($14k)
+Three separate mobile VRP reports bundled:
+- **Firebase Dynamic Links** (`goo.gl`/`page.link` resolver): forwards `intent://` URIs including non-BROWSABLE ones, allowing arbitrary app launch from a web link.
+- **Google Clock** Android app: exported `AlarmActivity` accepted `ACTION_SET_ALARM` intents from third-party apps without permission, allowing silent alarm creation (calendar/time awareness).
+- **Faceviewer** (AR mode in Google App): deep link `faceviewer://arvr.google.com/faceviewer?wturl=<gstatic-xss>` reflected a gstatic-hosted XSS into a WebView and triggered a non-BROWSABLE intent from web context.
+
+---
+
 ## $0 reports (one-liners)
 - **#159** `mkto-sj380051.com` (CNAME from `email.mandiant.com`) HTTPS certificate mismatch.
 - **#167** Google App Scene Viewer launches arbitrary `intent://` (BROWSABLE bypass).
@@ -100,3 +143,23 @@ Long click-trail leads to a "private" browser without parental controls, exposin
 - helpers that proxy fetches without origin checks (arbitrary LAN page reads).
 - compromised-renderer threat model: `chrome.runtime.sendMessage` from a content script of any URL.
 - native messaging handlers opening files/executables without path validation.
+
+### Lock screen / physical security (Pixel / Android):
+- SIM-PUK unlock flow rendering above keyguard without `FLAG_DISMISS_KEYGUARD` enforcement.
+- Emergency Dialer reachable from lock screen → Recent Calls → Contacts chain.
+- `PackageInstaller` silent-upgrade path skipping signing key verification (`checkUpgradeKeySetLP`).
+- Biometric bypass via fallback credential (PIN/pattern) accessible without device lock on some flows.
+
+### Wearables and companion apps:
+- Exported `BIND_LISTENER` activities on Wear OS companion accepting `intent://` from watch face context.
+- Watch face context treated as trusted sender without package origin validation.
+
+### Chrome AI features (side panel, extensions):
+- Gemini side panel `chrome.tabs.sendMessage` interceptable by content scripts with broad match patterns.
+- VS Code worker iframe reading `parentOrigin` from query string (IDX / Cloud Workstations pattern).
+- Extension devtools APIs (`chrome.devtools.network.getHAR`) accessible from compromised renderers → OAuth token exfil.
+
+### IoT / local network:
+- LAN-accessible setup APIs without authentication (Google Home `/setup/eureka_info`, Google Fiber `/ubus`).
+- Device-linking APIs that don't verify requester is the device owner.
+- DHCP-based MITM on GCE VMs / local LAN devices — intercepts metadata token requests.
