@@ -1,0 +1,40 @@
+{
+  "enabledMcpjsonServers": ["burp"],
+  "permissions": {
+    "allow": [
+      "Edit(**/*.py)",
+      "Write(**/*.py)",
+      "Bash(rg:*)",
+      "Bash(grep:*)"
+    ]
+  },
+  "skillOverrides": {
+    "h1-bugbounty": "user-invocable-only",
+    "bugcrowd-bugbounty": "user-invocable-only",
+    "google-vrp-cloud": "user-invocable-only",
+    "google-vrp-web": "user-invocable-only",
+    "google-vrp-android": "user-invocable-only"
+  },
+  "extraKnownMarketplaces": {
+    "anthropic-agent-skills": {
+      "source": {
+        "source": "github",
+        "repo": "anthropics/skills"
+      }
+    }
+  },
+  "mcpServers": {
+    "chrome-devtools": {
+      "command": "/bin/bash",
+      "args": [
+        "/Users/user/Desktop/_work/_ado2026/_GOALQApentest 2026/start-chrome-mcp.sh"
+      ]
+    },
+    "burp-suite": {
+      "command": "/bin/bash",
+      "args": [
+        "/Users/user/ai_config/burp-mcp/start-burp-mcp.sh"
+      ]
+    }
+  }
+}

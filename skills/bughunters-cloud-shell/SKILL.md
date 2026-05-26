@@ -1,6 +1,6 @@
 ---
 name: bughunters-cloud-shell
-description: Personal Google VRP reports by omespino — Google Cloud Shell instance takeover chain. XSS via .md style onload + LFI via file:// URI in /files/ endpoint + container escape via ../ path traversal + SSH private key exfiltration + root SSH to devshell-vm. XSS via SVG onload (Safari) with same SSH key chain. XSS via filename injection in Theia Debug Console launch.json (img onerror in program field). Delivery via "Open in Google Cloud Shell" button. GitHub: github.com/omespino/gcs_instace_takeover. Spanish triggers — "cloud shell google", "cloud shell xss", "cloud shell lfi", "devshell", "theia editor", "cloud shell ssh", "cloud shell takeover", "open in cloud shell", "cloud shell instancia".
+description: 'Personal Google VRP reports by omespino — Google Cloud Shell instance takeover chain. XSS via .md style onload + LFI via file:// URI in /files/ endpoint + container escape via ../ path traversal + SSH private key exfiltration + root SSH to devshell-vm. XSS via SVG onload (Safari) with same SSH key chain. XSS via filename injection in Theia Debug Console launch.json (img onerror in program field). Delivery via "Open in Google Cloud Shell" button. GitHub: github.com/omespino/gcs_instace_takeover. Spanish triggers — "cloud shell google", "cloud shell xss", "cloud shell lfi", "devshell", "theia editor", "cloud shell ssh", "cloud shell takeover", "open in cloud shell", "cloud shell instancia".'
 ---
 
 ## Reports: Cloud Shell XSS + Takeover chain (omespino)

@@ -1,6 +1,6 @@
 ---
 name: shodan-free
-description: Shodan free/zero-credit commands for passive recon. Commands that cost 0 credits and require no API key or Membership: shodan host (full host record), shodan count (result count with filters), shodan domain (subdomain + DNS dump), shodan honeyscore (honeypot probability), InternetDB API (internetdb.shodan.io, no key, CIDR sweeps with xargs -P). Also covers CLI setup (shodan init, shodan info). Spanish triggers — "shodan host", "internetdb", "shodan dominio", "shodan sin créditos", "reconocimiento pasivo shodan", "shodan gratis", "shodan passivo", "shodan count", "internetdb shodan", "shodan honeyscore".
+description: 'Shodan free/zero-credit commands for passive recon. Commands that cost 0 credits and require no API key or Membership: shodan host (full host record), shodan count (result count with filters), shodan domain (subdomain + DNS dump), shodan honeyscore (honeypot probability), InternetDB API (internetdb.shodan.io, no key, CIDR sweeps with xargs -P). Also covers CLI setup (shodan init, shodan info). Spanish triggers — "shodan host", "internetdb", "shodan dominio", "shodan sin créditos", "reconocimiento pasivo shodan", "shodan gratis", "shodan passivo", "shodan count", "internetdb shodan", "shodan honeyscore".'
 ---
 
 ## Shodan — Free / Zero-Credit Commands

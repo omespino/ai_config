@@ -1,6 +1,6 @@
 ---
 name: bughunters-apigee
-description: Personal Google VRP report by omespino — Apigee Node.js Hosted Target RCE as root via child_process.exec abuse. Deploy a Node.js proxy with exec payload, /etc/shadow readable confirms root. Pattern: SaaS/PaaS platforms with "hosted targets" or "custom scripts" features with inadequate sandboxing. Spanish triggers — "apigee rce", "apigee hosted target", "apigee node.js", "apigee sandbox", "apigee proxy rce", "google apigee".
+description: 'Personal Google VRP report by omespino — Apigee Node.js Hosted Target RCE as root via child_process.exec abuse. Deploy a Node.js proxy with exec payload, /etc/shadow readable confirms root. Pattern: SaaS/PaaS platforms with "hosted targets" or "custom scripts" features with inadequate sandboxing. Spanish triggers — "apigee rce", "apigee hosted target", "apigee node.js", "apigee sandbox", "apigee proxy rce", "google apigee".'
 ---
 
 ## Report 18 — RCE as root in Apigee via Node.js Hosted Target

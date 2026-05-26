@@ -1,0 +1,56 @@
+[projects."/Users/user/Desktop/_pentest"]
+trust_level = "trusted"
+
+[projects."/Users/user"]
+trust_level = "trusted"
+
+[projects."/Users/user/Desktop/tttttt"]
+trust_level = "trusted"
+
+[projects."/Users/user/Desktop/Google Web Designer.app"]
+trust_level = "trusted"
+
+[projects."/Users/user/Desktop"]
+trust_level = "trusted"
+
+[projects."/Users/user/Desktop/LFI"]
+trust_level = "trusted"
+
+[projects."/Users/user/Desktop/tmppp"]
+trust_level = "trusted"
+
+[tui.model_availability_nux]
+"gpt-5.5" = 4
+
+[mcp_servers.burp-suite]
+command = "/Users/user/ai_config/burp-mcp/start-burp-mcp.sh"
+
+[mcp_servers.burp-suite.tools.get_proxy_http_history]
+approval_mode = "approve"
+
+[mcp_servers.burp-suite.tools.get_proxy_websocket_history]
+approval_mode = "approve"
+
+[mcp_servers.burp-suite.tools.get_proxy_http_history_regex]
+approval_mode = "approve"
+
+[mcp_servers.burp-suite.tools.get_proxy_websocket_history_regex]
+approval_mode = "approve"
+
+[mcp_servers.burp-suite.tools.create_repeater_tab]
+approval_mode = "approve"
+
+[mcp_servers.burp-suite.tools.get_active_editor_contents]
+approval_mode = "approve"
+
+[mcp_servers.burp-suite.tools.output_project_options]
+approval_mode = "approve"
+
+[mcp_servers.burp-suite.tools.set_active_editor_contents]
+approval_mode = "approve"
+
+[mcp_servers.burp-suite.tools.generate_collaborator_payload]
+approval_mode = "approve"
+
+[features]
+goals = true 

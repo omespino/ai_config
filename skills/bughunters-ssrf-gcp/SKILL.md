@@ -1,6 +1,6 @@
 ---
 name: bughunters-ssrf-gcp
-description: Personal Google VRP reports by omespino — SSRF chains targeting GCP metadata. Blind SSRF oracle via GCP Uptime Check (0.0.0.0 bypass + redirect to [::169.254.169.254] for GCP metadata, character-by-character exfiltration via checkPassed boolean). SSRF in AMP Validator directly to 169.254.169.254 with GCP metadata parameters. Full bypass table: 0.0.0.0, octal 0177.0.0.1, decimal 2130706433, IPv4-mapped IPv6 [::169.254.169.254]. Spanish triggers — "uptime check ssrf", "gcp metadata ssrf", "amp validator ssrf", "0.0.0.0 ssrf", "169.254.169.254 gcp", "ssrf gcp", "metadata google cloud", "ssrf bypass ipv6".
+description: 'Personal Google VRP reports by omespino — SSRF chains targeting GCP metadata. Blind SSRF oracle via GCP Uptime Check (0.0.0.0 bypass + redirect to [::169.254.169.254] for GCP metadata, character-by-character exfiltration via checkPassed boolean). SSRF in AMP Validator directly to 169.254.169.254 with GCP metadata parameters. Full bypass table: 0.0.0.0, octal 0177.0.0.1, decimal 2130706433, IPv4-mapped IPv6 [::169.254.169.254]. Spanish triggers — "uptime check ssrf", "gcp metadata ssrf", "amp validator ssrf", "0.0.0.0 ssrf", "169.254.169.254 gcp", "ssrf gcp", "metadata google cloud", "ssrf bypass ipv6".'
 ---
 
 ## Reports: SSRF → GCP Metadata (omespino)

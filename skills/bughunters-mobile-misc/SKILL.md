@@ -1,6 +1,6 @@
 ---
 name: bughunters-mobile-misc
-description: Personal Google VRP reports by omespino — mobile and desktop miscellaneous findings. Local file read via Chrome file:// (file:///etc/environment has JS-compatible VAR="value" syntax, vars accessible in global scope). No rate limit + IDOR sequential on Android TV setup/lookup endpoint (seq + xargs -P20 parallel enumeration, ~900 devices/10K requests). XSS via PowerPoint 97-2003 javascript: hyperlink in Gmail iOS and Google Drive iOS (must be .ppt not .pptx). Spanish triggers — "chrome file://", "android tv idor", "powerpoint xss ios", "gmail ios xss", "drive ios xss", "ppt xss", "file:// chrome vulnerabilidad", "android tv enumeration", "lookup android tv".
+description: 'Personal Google VRP reports by omespino — mobile and desktop miscellaneous findings. Local file read via Chrome file:// (file:///etc/environment has JS-compatible VAR="value" syntax, vars accessible in global scope). No rate limit + IDOR sequential on Android TV setup/lookup endpoint (seq + xargs -P20 parallel enumeration, ~900 devices/10K requests). XSS via PowerPoint 97-2003 javascript: hyperlink in Gmail iOS and Google Drive iOS (must be .ppt not .pptx). Spanish triggers — "chrome file://", "android tv idor", "powerpoint xss ios", "gmail ios xss", "drive ios xss", "ppt xss", "file:// chrome vulnerabilidad", "android tv enumeration", "lookup android tv".'
 ---
 
 ## Reports: Mobile/Desktop Misc Findings (omespino)

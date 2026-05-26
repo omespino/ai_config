@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "burp": {
+      "command": "/bin/bash",
+      "args": ["/Users/user/ai_config/burp-mcp/start-burp-mcp.sh"]
+    }
+  }
+}
