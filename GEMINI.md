@@ -77,3 +77,11 @@ No respondas sobre el tema sin haber leído primero el archivo.
 |---|---|
 | `shodan-free` | "shodan host", "internetdb", "shodan sin créditos", "shodan gratis" |
 | `shodan-advanced` | "filtros shodan", "shodan download", "shodan scan", "shodan avanzado" |
+
+### AI Agent Security (SAIF 2.0 — Google, May 2025)
+| Skill | Triggers |
+|---|---|
+| `ai-agents-architecture` | "arquitectura agente", "agent architecture", "reasoning core", "perception agent", "agent orchestration", "agent layers", "agent pipeline" |
+| `ai-agents-threats` | "rogue actions", "acciones no autorizadas", "prompt injection agente", "indirect prompt injection", "sensitive data disclosure agent", "data exfiltration agent", "amenazas agente ia" |
+| `ai-agents-security-design` | "secure agent design", "diseño seguro agente", "agent security principles", "least privilege agent", "agent observability", "agent permissions", "defense in depth agent", "agent guardrails", "human in the loop agent" |
+| `saif-framework` | "saif", "saif map", "saif risks", "saif controls", "ai risk map", "mapa de riesgos ia", "framework seguridad ia", "google saif", "data poisoning saif", "ai risk assessment" |
