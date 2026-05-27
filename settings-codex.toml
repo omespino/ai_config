@@ -25,6 +25,9 @@ trust_level = "trusted"
 [projects."/Users/user/Desktop/_expediente_teledolar"]
 trust_level = "trusted"
 
+[projects."/Users/user/Desktop/_google"]
+trust_level = "trusted"
+
 [tui.model_availability_nux]
 "gpt-5.5" = 4
 

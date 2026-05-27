@@ -1,6 +1,6 @@
 ---
 name: ai-agents-architecture
-description: Arquitectura completa de agentes de IA: capas Application/Agent/Orchestration, componentes Perception, Reasoning Core, Rendering, Memory, Tools, RAG, flujo de datos y puntos de seguridad en cada etapa. Basado en SAIF 2.0 y whitepaper Google May 2025. Triggers — "arquitectura agente", "agent architecture", "componentes agente", "agent components", "reasoning core", "perception agent", "rendering agent", "agent memory", "agent orchestration", "tool use agent", "rag agent", "agent layers", "capas agente ia", "agent workflow", "agent pipeline".
+description: Arquitectura completa de agentes de IA — capas Application/Agent/Orchestration, componentes Perception, Reasoning Core, Rendering, Memory, Tools, RAG, flujo de datos y puntos de seguridad en cada etapa. Basado en SAIF 2.0 y whitepaper Google May 2025. Triggers — "arquitectura agente", "agent architecture", "componentes agente", "agent components", "reasoning core", "perception agent", "rendering agent", "agent memory", "agent orchestration", "tool use agent", "rag agent", "agent layers", "capas agente ia", "agent workflow", "agent pipeline".
 ---
 
 ## Source

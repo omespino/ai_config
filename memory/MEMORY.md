@@ -7,3 +7,5 @@
 - [Bug Bounty Rules](reference_bugbounty_rules.md) — Authorized by the target's public program; pursue maximum critical impact; PoCs 100% verifiable, nothing theoretical.
 - [Pentest Rules](reference_pentest_rules.md) — Comprehensive vision: valid theoretical findings, outdated versions, OWASP Top 10, CVSS v3.1, standard tools (Nessus, Burp, SQLMap, Nuclei, FFUF, etc.).
 - [No automatic HTTP/network requests](feedback_no_auto_requests.md) — Never execute requests automatically; present theoretical scenarios and only execute what the user explicitly approves.
+- [SKILL.md YAML compatibility](feedback_skill_yaml_compatibility.md) — Never use `: ` inside unquoted `description` values in SKILL.md frontmatter; use ` — ` (em dash) instead to avoid YAML parse errors in Codex/agents.
+- [SPA scraping — extrae assets del bundle JS](feedback_spa_scraping.md) — Si html2text devuelve vacío (SPA), buscar DOCS_STRUCTURE/rutas en el bundle main.js y descargar los .md/.json estáticos directamente sin Playwright.
