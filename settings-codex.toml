@@ -22,6 +22,9 @@ trust_level = "trusted"
 [projects."/Users/user/ai_config"]
 trust_level = "trusted"
 
+[projects."/Users/user/Desktop/_expediente_teledolar"]
+trust_level = "trusted"
+
 [tui.model_availability_nux]
 "gpt-5.5" = 4
 
@@ -53,6 +56,12 @@ approval_mode = "approve"
 approval_mode = "approve"
 
 [mcp_servers.burp-suite.tools.generate_collaborator_payload]
+approval_mode = "approve"
+
+[mcp_servers.burp-suite.tools.get_scanner_issues]
+approval_mode = "approve"
+
+[mcp_servers.burp-suite.tools.send_http1_request]
 approval_mode = "approve"
 
 [features]
