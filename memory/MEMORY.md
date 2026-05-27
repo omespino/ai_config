@@ -11,3 +11,5 @@
 - [SPA scraping — extrae assets del bundle JS](feedback_spa_scraping.md) — Si html2text devuelve vacío (SPA), buscar DOCS_STRUCTURE/rutas en el bundle main.js y descargar los .md/.json estáticos directamente sin Playwright.
 - [Burp MCP — formato de content (LF, no \\r\\n)](feedback_burp_mcp_content_format.md) — Usar saltos de línea reales en `create_repeater_tab`/`send_http1_request`/`send_to_intruder`; `\r\n` literal causa 400 Bad Request.
 - [Burp MCP — bridge con reconexión automática](feedback_burp_bridge_reconnect.md) — Bridge fijo para sobrevivir reinicios de Burp; `"Command failed with no output"` = SSE caído, verificar puerto 9876.
+- [Burp MCP — prefijo de agente en tabName](feedback_burp_tab_naming.md) — Siempre prefijar tabs con el agente: `claude - nombre`, `codex - nombre`, `gemini - nombre`, `agy - nombre`.
+- [Codex/Agy invocación no interactiva](feedback_codex_invocation.md) — `codex exec --skip-git-repo-check --dangerously-bypass-approvals-and-sandbox`; Agy usa `--print-timeout 3m`.

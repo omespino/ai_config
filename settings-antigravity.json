@@ -4,7 +4,9 @@
   "permissions": {
     "allow": [
       "mcp(burp/get_proxy_http_history)",
-      "mcp(burp/get_scanner_issues)"
+      "mcp(burp/get_scanner_issues)",
+      "mcp(burp/create_repeater_tab)",
+      "mcp(burp/send_to_intruder)"
     ]
   },
   "trustedWorkspaces": [
@@ -12,6 +14,7 @@
     "/Users/user",
     "/Users/user/ai_config",
     "/Users/user/Desktop/_google/poc_agy_mcp",
-    "/Users/user/Desktop/_google"
+    "/Users/user/Desktop/_google",
+    "/Users/user/Desktop/_expediente_teledolar"
   ]
 }

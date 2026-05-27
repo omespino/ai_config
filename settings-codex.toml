@@ -35,37 +35,37 @@ trust_level = "trusted"
 command = "/Users/user/ai_config/burp-mcp/start-burp-mcp.sh"
 
 [mcp_servers.burp-suite.tools.get_proxy_http_history]
-approval_mode = "approve"
+approval_mode = "auto"
 
 [mcp_servers.burp-suite.tools.get_proxy_websocket_history]
-approval_mode = "approve"
+approval_mode = "auto"
 
 [mcp_servers.burp-suite.tools.get_proxy_http_history_regex]
-approval_mode = "approve"
+approval_mode = "auto"
 
 [mcp_servers.burp-suite.tools.get_proxy_websocket_history_regex]
-approval_mode = "approve"
+approval_mode = "auto"
 
 [mcp_servers.burp-suite.tools.create_repeater_tab]
-approval_mode = "approve"
+approval_mode = "auto"
 
 [mcp_servers.burp-suite.tools.get_active_editor_contents]
-approval_mode = "approve"
+approval_mode = "auto"
 
 [mcp_servers.burp-suite.tools.output_project_options]
-approval_mode = "approve"
+approval_mode = "auto"
 
 [mcp_servers.burp-suite.tools.set_active_editor_contents]
-approval_mode = "approve"
+approval_mode = "auto"
 
 [mcp_servers.burp-suite.tools.generate_collaborator_payload]
-approval_mode = "approve"
+approval_mode = "auto"
 
 [mcp_servers.burp-suite.tools.get_scanner_issues]
-approval_mode = "approve"
+approval_mode = "auto"
 
 [mcp_servers.burp-suite.tools.send_http1_request]
-approval_mode = "approve"
+approval_mode = "auto"
 
 [features]
 goals = true 

@@ -61,3 +61,15 @@ Cuando el usuario invoca `/rdoc` y adjunta un PDF, hacer SOLO revisión document
 7. **Calidad general** — formato, numeración, tablas, imágenes.
 
 Output: hallazgos por categoría con página/sección, descripción del problema y sugerencia de corrección.
+
+---
+
+## Burp MCP — reglas de uso
+
+**Formato de content (saltos de línea reales):** Al usar `create_repeater_tab`, `send_to_intruder`, `send_http1_request` o cualquier tool de Burp que reciba contenido HTTP, escribir el request con saltos de línea reales (LF). Nunca usar `\r\n` como texto literal — causa 400 Bad Request. Omitir `Accept-Encoding` para recibir respuestas legibles.
+
+**Prefijo de agente en tabName:** Al crear tabs en Burp (Repeater, Intruder o cualquier otra función), el `tabName` SIEMPRE debe llevar un prefijo con el nombre del agente seguido de ` - ` y el nombre descriptivo:
+- Gemini → `gemini - nombre`
+- Antigravity → `agy - nombre`
+- Claude → `claude - nombre`
+- Codex → `codex - nombre`

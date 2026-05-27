@@ -9,10 +9,15 @@ El bridge SSE→stdio de Burp MCP muere cuando Burp se reinicia o la conexión S
 
 **Why:** Diseño frágil: `async with sse_client → ClientSession → stdio_server`. Una sola desconexión SSE mata el bridge completo.
 
-**Fix aplicado (2026-05-27):** Ambos bridges actualizados con loop de reconexión automática (`_sse_reconnect_loop`) que corre como background task independiente del servidor stdio. El bridge ahora:
-- Espera hasta 15s para la primera conexión SSE al iniciar
-- Si el SSE cae, reintenta cada 5 segundos sin morir
-- El servidor stdio sigue vivo durante la reconexión
+**Fix aplicado (2026-05-27, v2):** El bug real era `anyio.ClosedResourceError`: cuando Burp cierra el SSE limpiamente (EOF al reiniciar), el `asyncio.sleep(86400)` NO se interrumpe, `_session` queda obsoleta y el siguiente `call_tool` explota. Fix en dos partes:
+
+1. `call_tool` captura `ClosedResourceError` → devuelve error legible + llama `_reconnect_signal.set()`
+2. `_sse_reconnect_loop` espera en `_reconnect_signal.wait()` en vez de `sleep(86400)` → cuando la señal llega, sale del contexto SSE y reconecta en 5s
+
+El bridge ahora:
+- Detecta drops de SSE en el primer `call_tool` fallido
+- Reconecta automáticamente en ~5s sin morir
+- Devuelve mensaje claro: `"Burp SSE connection was lost. Reconnecting... retry in ~5s."`
 
 **Archivos modificados:**
 - `~/.codex/burp-mcp/burp_stdio_bridge.py`
