@@ -4,9 +4,20 @@
   "permissions": {
     "allow": [
       "mcp(burp/get_proxy_http_history)",
+      "mcp(burp/get_proxy_http_history_regex)",
+      "mcp(burp/get_proxy_websocket_history)",
+      "mcp(burp/get_proxy_websocket_history_regex)",
+      "mcp(burp/get_active_editor_contents)",
+      "mcp(burp/set_active_editor_contents)",
+      "mcp(burp/output_project_options)",
+      "mcp(burp/output_user_options)",
       "mcp(burp/get_scanner_issues)",
+      "mcp(burp/generate_collaborator_payload)",
       "mcp(burp/create_repeater_tab)",
-      "mcp(burp/send_to_intruder)"
+      "mcp(burp/send_http1_request)",
+      "mcp(burp/send_http2_request)",
+      "mcp(burp/send_to_intruder)",
+      "mcp(burp/set_proxy_intercept_state)"
     ]
   },
   "trustedWorkspaces": [

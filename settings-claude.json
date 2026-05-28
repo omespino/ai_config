@@ -1,5 +1,4 @@
 {
-  "enabledMcpjsonServers": ["burp"],
   "permissions": {
     "allow": [
       "Edit(**/*.py)",
@@ -8,12 +7,16 @@
       "Bash(grep:*)"
     ]
   },
+  "enabledMcpjsonServers": [
+    "burp"
+  ],
   "skillOverrides": {
     "h1-bugbounty": "user-invocable-only",
     "bugcrowd-bugbounty": "user-invocable-only",
     "google-vrp-cloud": "user-invocable-only",
     "google-vrp-web": "user-invocable-only",
-    "google-vrp-android": "user-invocable-only"
+    "google-vrp-android": "user-invocable-only",
+    "google-vrp-public-hof": "user-invocable-only"
   },
   "extraKnownMarketplaces": {
     "anthropic-agent-skills": {

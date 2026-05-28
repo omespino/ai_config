@@ -28,6 +28,9 @@ trust_level = "trusted"
 [projects."/Users/user/Desktop/_google"]
 trust_level = "trusted"
 
+[projects."/Users/user/Desktop/_google/ssrfmay26"]
+trust_level = "trusted"
+
 [tui.model_availability_nux]
 "gpt-5.5" = 4
 
@@ -65,6 +68,18 @@ approval_mode = "auto"
 approval_mode = "auto"
 
 [mcp_servers.burp-suite.tools.send_http1_request]
+approval_mode = "auto"
+
+[mcp_servers.burp-suite.tools.send_http2_request]
+approval_mode = "auto"
+
+[mcp_servers.burp-suite.tools.send_to_intruder]
+approval_mode = "auto"
+
+[mcp_servers.burp-suite.tools.set_proxy_intercept_state]
+approval_mode = "auto"
+
+[mcp_servers.burp-suite.tools.output_user_options]
 approval_mode = "auto"
 
 [features]

@@ -1,0 +1,1 @@
+/Users/user/ai_config/GEMINI.md

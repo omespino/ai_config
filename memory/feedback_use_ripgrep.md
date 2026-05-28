@@ -6,13 +6,13 @@ originSessionId: 6673f0e2-c178-4809-8cc5-5301467e98a9
 ---
 
 1. Always invoke `rg` (ripgrep) instead of `grep`/`egrep`/`fgrep` for text search.
-2. Both `rg` and `grep` are pre-authorized — never ask for permission or pause for confirmation, just run them.
+2. Both `rg` and `grep` are **unconditionally pre-authorized** — never ask for permission, never pause for confirmation, never announce you're about to run them. Just execute immediately.
 
-**Why:** Explicit user preferences stated on 2026-05-05. Ripgrep is faster and has better defaults; the user wants frictionless searching during pentest/triage workflows where confirmation prompts add noise.
+**Why:** Explicit user preference (confirmed 2026-05-05 and 2026-05-28). Ripgrep is faster and has better defaults; confirmation prompts add noise in pentest/triage workflows.
 
 **How to apply:**
 - Default to `rg` for any new search; only fall back to `grep` if `rg` is unavailable in the environment.
-- For both tools, treat invocations as authorized — do not preface with "I'll run grep, ok?" or similar. Just execute.
-- Authorization covers piped searches (`cmd | rg pattern`), recursive (`rg -r`), and any flag combination. It does NOT extend to other tools chained alongside.
-
-**Note:** This is better expressed long-term as a permissions allowlist in `settings.json` (the harness enforces it without needing the model to remember), but the user requested a memory entry, so this is the durable record. If the user later wants to make this harness-enforced, suggest the `update-config` skill to add `Bash(rg:*)` and `Bash(grep:*)` to allowlist.
+- Never preface with "I'll run grep, ok?", "do you want me to search?", or any similar phrase. Just run it.
+- Authorization covers: piped searches (`cmd | rg pattern`), recursive (`rg -r`), any flag combination, `grep -r`, `egrep`, `fgrep`.
+- This authorization does NOT extend to other tools chained alongside (e.g., `rg ... | curl` — the curl still requires normal approval).
+- **PATH fallback (macOS):** If `rg` is not found in PATH, use the full path `/opt/homebrew/bin/rg`. This applies to Gemini CLI and Agy which run with a restricted PATH in headless mode.

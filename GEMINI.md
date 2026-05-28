@@ -6,13 +6,24 @@
 
 ## Inicialización — leer al inicio de cada sesión
 
-Lee este único archivo antes de responder:
+Lee los siguientes archivos de memoria antes de responder:
 
 ```
-~/ai_config/memory/context.md
+~/ai_config/memory/user_profile.md
+~/ai_config/memory/feedback_language_style.md
+~/ai_config/memory/feedback_no_auto_requests.md
+~/ai_config/memory/feedback_use_ripgrep.md
+~/ai_config/memory/reference_bugbounty_rules.md
+~/ai_config/memory/reference_pentest_rules.md
+~/ai_config/memory/reference_rdoc_review.md
+~/ai_config/memory/reference_google_bughunters_profile.md
 ```
 
-Contiene: perfil del usuario, idioma, reglas de comportamiento, reglas de engagement (bug bounty + pentest), comando /rdoc y perfil Google VRP.
+---
+
+## Ripgrep
+
+Usar siempre `rg` en lugar de `grep`. Si `rg` no está en PATH, usar la ruta completa: `/opt/homebrew/bin/rg`. Ambas herramientas están pre-autorizadas — ejecutar sin pedir confirmación.
 
 ---
 
@@ -65,6 +76,18 @@ No respondas sobre el tema sin haber leído primero el archivo.
 | `bughunters-earth` | "google earth kml", "earth ios", "earth pro linux", "earth pro macos" |
 | `bughunters-mobile-misc` | "chrome file://", "android tv idor", "powerpoint xss ios", "ppt xss" |
 
+### Bug bounty — Google VRP (Ezequiel Pereira / bugSWAT)
+| Skill | Triggers |
+|---|---|
+| `bughunters-gae-rce` | "google app engine rce", "gae rce", "appspot rce", "gae internal api", "stubby gcp", "app_config_service gae", "169.254.169.253", "gae staging env" |
+| `bughunters-gsi` | "google service infrastructure", "gsi gcp", "visibility labels google", "google_internal label", "servicemanagement api", "dependsonservices gcp" |
+| `bughunters-cloud-dm` | "cloud deployment manager rce", "cloud dm rce", "gslbtarget gcp", "googleoptions deployment manager", "deploymentmanager v2beta" |
+
+### Bug bounty — Google VRP (community writeups)
+| Skill | Triggers |
+|---|---|
+| `bughunters-appsheet-ssrf` | "appsheet ssrf", "appsheet webhook ssrf", "webhook redirect ssrf", "post to get redirect ssrf", "301 redirect ssrf gcp", "nechudav appsheet" |
+
 ### Bug bounty — Google VRP HoF público
 | Skill | Triggers |
 |---|---|
@@ -72,11 +95,23 @@ No respondas sobre el tema sin haber leído primero el archivo.
 | `google-vrp-web` | "google vrp web", "google web xss", "oauth google" |
 | `google-vrp-android` | "android google", "mobile vrp", "kernelctf", "chrome extension google" |
 
-### Recon
+### Bug bounty — Microsoft VRP
+| Skill | Triggers |
+|---|---|
+| `bughunters-microsoft` | "microsoft bug bounty", "msrc", "microsoft ppe", "microsoft-ppe.com", "msal token", "azure ad clientid", "offers copilot microsoft", "nova microsoft store", "swagger microsoft ppe" |
+
+### VRP report writing
+| Skill | Triggers |
+|---|---|
+| `vrp-report-template` | "reporte vrp", "escribir reporte vrp", "formato reporte bug bounty", "template vrp google", "vrp report style", "estructura reporte vrp" |
+
+### Recon y herramientas web
 | Skill | Triggers |
 |---|---|
 | `shodan-free` | "shodan host", "internetdb", "shodan sin créditos", "shodan gratis" |
 | `shodan-advanced` | "filtros shodan", "shodan download", "shodan scan", "shodan avanzado" |
+| `pentest-source-maps` | "source map", "sourcemapper", "archivo .map", "module federation manifest", "reconstruir codigo fuente", "msal token sessionstorage", "api key mapbox permisos" |
+| `pentest-ssrf-redirect-server` | "redirect server ssrf", "servidor de redirect ssrf", "php redirect ssrf", "script redirect 301", "redirect 302 ssrf", "169.254.169.254 redirect", "redirect chain ssrf" |
 
 ### AI Agent Security (SAIF 2.0 — Google, May 2025)
 | Skill | Triggers |

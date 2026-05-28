@@ -16,7 +16,7 @@
       "command": "/bin/bash",
       "args": ["/Users/user/ai_config/burp-mcp/start-burp-mcp.sh"],
       "timeout": 30000,
-      "trust": false
+      "trust": true
     }
   }
 }
