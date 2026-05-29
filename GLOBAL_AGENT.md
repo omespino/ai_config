@@ -69,6 +69,9 @@ Skills live in `~/ai_config/skills/`. Each skill loads ONLY when its specific tr
 - `google-vrp-web` — XSS, OAuth misconfigs, SSRF, IDOR in Google web services (Drive, Docs, Gmail, YouTube, Workspace). Triggers: "google web xss", "oauth google", "drive docs gmail idor", "google vrp web".
 - `google-vrp-android` — Android intent redirects, path traversal, Chrome extension UXSS, kernelCTF/v8CTF, Fuchsia/gVisor. Triggers: "android google", "mobile vrp", "chrome extension google", "kernelctf".
 
+### Cloud infra (offensive + build)
+- `gke-terraform-offensive` — GKE/GCP Terraform offensive: recon (public control plane, exposed tfstate), Terraform/tfstate attack surface (plaintext secrets, GCS backend, SA keys in CI), misconfig catalog (public CP, legacy ABAC, no Workload Identity, legacy metadata/kube-env, over-priv node SA, no NetworkPolicy/shielded nodes), attack chains (SSRF→169.254.169.254 node SA token, pod→cluster takeover, container escape, RBAC privesc, kube-env kubelet cert theft), GCP post-exploitation, + hardened private GKE build module. references/: misconfig-catalog, attack-playbook, audit-checklist (CIS), hardened-gke.tf. Triggers: "gke", "terraform gcp", "atacar gke", "gke misconfig", "tfstate expuesto", "workload identity", "metadata 169.254.169.254 gke", "node service account gke", "kube-env", "container escape gke", "rbac privesc", "cluster privado gke", "gke hardening".
+
 ### Recon
 - `shodan-free` — Zero-credit commands: host, count, domain, honeyscore, InternetDB CIDR sweep. Triggers: "shodan host", "internetdb", "shodan sin créditos", "reconocimiento pasivo shodan", "shodan gratis".
 - `shodan-advanced` — Filtered search, download/parse/convert, stats/facets, scan submit, alerts, REST API, Python. Triggers: "filtros shodan", "shodan download", "shodan scan", "shodan alerts", "shodan api", "shodan avanzado".
